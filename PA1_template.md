@@ -9,10 +9,55 @@ output:
 
 ## Loading and preprocessing the data
 
-```{r}
+
+```r
 library(ggplot2)
+```
+
+```
+## Warning: package 'ggplot2' was built under R version 4.0.5
+```
+
+```r
 library(scales)
+```
+
+```
+## Warning: package 'scales' was built under R version 4.0.5
+```
+
+```r
 library(Hmisc)
+```
+
+```
+## Warning: package 'Hmisc' was built under R version 4.0.5
+```
+
+```
+## Loading required package: lattice
+```
+
+```
+## Loading required package: survival
+```
+
+```
+## Loading required package: Formula
+```
+
+```
+## 
+## Attaching package: 'Hmisc'
+```
+
+```
+## The following objects are masked from 'package:base':
+## 
+##     format.pval, units
+```
+
+```r
 unzip(zipfile="activity.zip")
 data <- read.csv("activity.csv")
 
@@ -25,50 +70,68 @@ clean_data<-data[!NA_flag,]
 
 
 ## What is mean total number of steps taken per day?
-```{r}
+
+```r
 Total_steps_per_day=tapply(data$steps,data$date,FUN=sum,na.rm=TRUE)
 qplot(Total_steps_per_day, xlab='Total steps per day', ylab='Frequency', binwidth=1000)
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-2-1.png)<!-- -->
+
+```r
 m<-mean(Total_steps_per_day)
 med<-median(Total_steps_per_day)
 ```
-- Mean is `r m`
-- Median is `r med`
+- Mean is 9354.2295082
+- Median is 10395
 
 ## What is the average daily activity pattern?
-```{r}
+
+```r
 average <- aggregate(x=list(mean_steps=data$steps), by=list(interval=data$interval), FUN=mean, na.rm=TRUE)
 ggplot(data=average, aes(x=interval, y=mean_steps)) +
     geom_line() +
     xlab("5-minute intervals") +
     ylab("Average number of steps taken")
-max_interval <- average[which.max(average$mean_steps),]
+```
 
+![](PA1_template_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
+
+```r
+max_interval <- average[which.max(average$mean_steps),]
 ```
 5-minute interval with maximum number of steps is:
-`r max_interval`
+835, 206.1698113
 
 ## Imputing missing values
-```{r}
+
+```r
 missing_number<-sum(NA_flag)
 ```
-The total number of missing values is `r missing_number`
+The total number of missing values is 2304
 
-```{r}
+
+```r
 imputed_data<-data
 imputed_data$steps <- impute(data$steps, fun=mean)
 Total_steps_imputed <- tapply(imputed_data$steps, imputed_data$date, sum)
 qplot(Total_steps_imputed, xlab='Total steps per day', ylab='Frequency', binwidth=1000)
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
+
+```r
 new_mean<-mean(Total_steps_imputed)
 new_med<-median(Total_steps_imputed)
-
 ```
-Original mean was `r m`; new mean is `r new_mean`
-Original median was `r med`; new median is `new_med`
+Original mean was 9354.2295082; new mean is 1.0766189\times 10^{4}
+Original median was 10395; new median is `new_med`
 Effect: Median of data is pushed toward the mean
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
-```{r}
+
+```r
 data$weekday <- weekdays(as.Date(as.character(data$date)))
 data$weekend <- ifelse(data$weekday == "Saturday" | data$weekday == "Sunday", "Weekend", "Weekday")
 
@@ -79,6 +142,8 @@ ggplot(new_average, aes(x =new_interval, y=new_steps, color=weekend)) +
   facet_grid(weekend ~ .) +
   labs(title = "Mean of Steps", x = "interval", y = "steps")
 ```
+
+![](PA1_template_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
 
 
 -There is some variation on weekdays whereas not much variation on weekends.
