@@ -12,7 +12,6 @@ library(Hmisc)
 unzip(zipfile="activity.zip")
 data <- read.csv("activity.csv")
 
-
 #flag for NA vaues
 NA_flag<-is.na(data$steps)
 #data excluding NA values
@@ -23,7 +22,7 @@ clean_data<-data[!NA_flag,]
 ## What is mean total number of steps taken per day?
 ```{r include = TRUE}
 Total_steps_per_day=tapply(data$steps,data$date,FUN=sum,na.rm=TRUE)
-qplot(Total_steps_per_day, xlab='Total steps per day', ylab='Frequency', binwidth=1000)
+print(qplot(Total_steps_per_day, xlab='Total steps per day', ylab='Frequency', binwidth=1000))
 m<-mean(Total_steps_per_day)
 med<-median(Total_steps_per_day)
 ```
@@ -33,10 +32,10 @@ med<-median(Total_steps_per_day)
 ## What is the average daily activity pattern?
 ```{r include = TRUE}
 average <- aggregate(x=list(mean_steps=data$steps), by=list(interval=data$interval), FUN=mean, na.rm=TRUE)
-ggplot(data=average, aes(x=interval, y=mean_steps)) +
+print(ggplot(data=average, aes(x=interval, y=mean_steps)) +
     geom_line() +
     xlab("5-minute intervals") +
-    ylab("Average number of steps taken")
+    ylab("Average number of steps taken"))
 max_interval <- average[which.max(average$mean_steps),]
 
 ```
@@ -53,13 +52,13 @@ The total number of missing values is `r missing_number`
 imputed_data<-data
 imputed_data$steps <- impute(data$steps, fun=mean)
 Total_steps_imputed <- tapply(imputed_data$steps, imputed_data$date, sum)
-qplot(Total_steps_imputed, xlab='Total steps per day', ylab='Frequency', binwidth=1000)
+print(qplot(Total_steps_imputed, xlab='Total steps per day', ylab='Frequency', binwidth=1000))
 new_mean<-mean(Total_steps_imputed)
 new_med<-median(Total_steps_imputed)
 
 ```
 Original mean was `r m`; new mean is `r new_mean`
-Original median was `r med`; new median is `new_med`
+Original median was `r med`; new median is `r `new_med`
 Effect: Median of data is pushed toward the mean
 
 ## Are there differences in activity patterns between weekdays and weekends?
@@ -70,10 +69,10 @@ data$weekend <- ifelse(data$weekday == "Saturday" | data$weekday == "Sunday", "W
 
 new_average <- aggregate(list(new_steps=data$steps), by=list(weekend=data$weekend, new_interval=data$interval), mean,na.rm=TRUE)
 
-ggplot(new_average, aes(x =new_interval, y=new_steps, color=weekend)) +
+print(ggplot(new_average, aes(x =new_interval, y=new_steps, color=weekend)) +
   geom_line() +
   facet_grid(weekend ~ .) +
-  labs(title = "Mean of Steps", x = "interval", y = "steps")
+  labs(title = "Mean of Steps", x = "interval", y = "steps"))
 ```
 
 
