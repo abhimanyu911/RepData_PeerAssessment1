@@ -14,6 +14,10 @@ library(ggplot2)
 ## Warning: package 'ggplot2' was built under R version 4.0.5
 ```
 
+```
+## RStudio Community is a great place to get help: https://community.rstudio.com/c/tidyverse
+```
+
 ```r
 library(scales)
 ```
@@ -57,7 +61,6 @@ library(Hmisc)
 unzip(zipfile="activity.zip")
 data <- read.csv("activity.csv")
 
-
 #flag for NA vaues
 NA_flag<-is.na(data$steps)
 #data excluding NA values
@@ -69,7 +72,7 @@ clean_data<-data[!NA_flag,]
 
 ```r
 Total_steps_per_day=tapply(data$steps,data$date,FUN=sum,na.rm=TRUE)
-qplot(Total_steps_per_day, xlab='Total steps per day', ylab='Frequency', binwidth=1000)
+print(qplot(Total_steps_per_day, xlab='Total steps per day', ylab='Frequency', binwidth=1000))
 ```
 
 ![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2-1.png)
@@ -85,10 +88,10 @@ med<-median(Total_steps_per_day)
 
 ```r
 average <- aggregate(x=list(mean_steps=data$steps), by=list(interval=data$interval), FUN=mean, na.rm=TRUE)
-ggplot(data=average, aes(x=interval, y=mean_steps)) +
+print(ggplot(data=average, aes(x=interval, y=mean_steps)) +
     geom_line() +
     xlab("5-minute intervals") +
-    ylab("Average number of steps taken")
+    ylab("Average number of steps taken"))
 ```
 
 ![plot of chunk unnamed-chunk-3](figure/unnamed-chunk-3-1.png)
@@ -111,7 +114,7 @@ The total number of missing values is 2304
 imputed_data<-data
 imputed_data$steps <- impute(data$steps, fun=mean)
 Total_steps_imputed <- tapply(imputed_data$steps, imputed_data$date, sum)
-qplot(Total_steps_imputed, xlab='Total steps per day', ylab='Frequency', binwidth=1000)
+print(qplot(Total_steps_imputed, xlab='Total steps per day', ylab='Frequency', binwidth=1000))
 ```
 
 ![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5-1.png)
@@ -121,7 +124,7 @@ new_mean<-mean(Total_steps_imputed)
 new_med<-median(Total_steps_imputed)
 ```
 Original mean was 9354.2295082; new mean is 1.0766189 &times; 10<sup>4</sup>
-Original median was 10395; new median is `new_med`
+Original median was 10395; new median is 1.0766189 &times; 10<sup>4</sup>
 Effect: Median of data is pushed toward the mean
 
 ## Are there differences in activity patterns between weekdays and weekends?
@@ -133,10 +136,10 @@ data$weekend <- ifelse(data$weekday == "Saturday" | data$weekday == "Sunday", "W
 
 new_average <- aggregate(list(new_steps=data$steps), by=list(weekend=data$weekend, new_interval=data$interval), mean,na.rm=TRUE)
 
-ggplot(new_average, aes(x =new_interval, y=new_steps, color=weekend)) +
+print(ggplot(new_average, aes(x =new_interval, y=new_steps, color=weekend)) +
   geom_line() +
   facet_grid(weekend ~ .) +
-  labs(title = "Mean of Steps", x = "interval", y = "steps")
+  labs(title = "Mean of Steps", x = "interval", y = "steps"))
 ```
 
 ![plot of chunk unnamed-chunk-6](figure/unnamed-chunk-6-1.png)
