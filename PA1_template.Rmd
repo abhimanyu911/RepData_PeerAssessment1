@@ -1,15 +1,11 @@
 ---
 title: 'Reproducible Research: Peer Assessment 1'
-output:
-  html_document:
-    keep_md: yes
-  pdf_document: default
 ---
 
 
 ## Loading and preprocessing the data
 
-```{r}
+```{r include = TRUE}
 library(ggplot2)
 library(scales)
 library(Hmisc)
@@ -25,7 +21,7 @@ clean_data<-data[!NA_flag,]
 
 
 ## What is mean total number of steps taken per day?
-```{r}
+```{r include = TRUE}
 Total_steps_per_day=tapply(data$steps,data$date,FUN=sum,na.rm=TRUE)
 qplot(Total_steps_per_day, xlab='Total steps per day', ylab='Frequency', binwidth=1000)
 m<-mean(Total_steps_per_day)
@@ -35,7 +31,7 @@ med<-median(Total_steps_per_day)
 - Median is `r med`
 
 ## What is the average daily activity pattern?
-```{r}
+```{r include = TRUE}
 average <- aggregate(x=list(mean_steps=data$steps), by=list(interval=data$interval), FUN=mean, na.rm=TRUE)
 ggplot(data=average, aes(x=interval, y=mean_steps)) +
     geom_line() +
@@ -45,15 +41,15 @@ max_interval <- average[which.max(average$mean_steps),]
 
 ```
 5-minute interval with maximum number of steps is:
-`r max_interval`
+- `r max_interval`
 
 ## Imputing missing values
-```{r}
+```{r include = TRUE}
 missing_number<-sum(NA_flag)
 ```
 The total number of missing values is `r missing_number`
 
-```{r}
+```{r include = TRUE}
 imputed_data<-data
 imputed_data$steps <- impute(data$steps, fun=mean)
 Total_steps_imputed <- tapply(imputed_data$steps, imputed_data$date, sum)
@@ -68,7 +64,7 @@ Effect: Median of data is pushed toward the mean
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
-```{r}
+```{r include = TRUE}
 data$weekday <- weekdays(as.Date(as.character(data$date)))
 data$weekend <- ifelse(data$weekday == "Saturday" | data$weekday == "Sunday", "Weekend", "Weekday")
 

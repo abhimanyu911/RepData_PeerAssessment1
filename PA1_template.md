@@ -1,9 +1,5 @@
 ---
 title: 'Reproducible Research: Peer Assessment 1'
-output:
-  html_document:
-    keep_md: yes
-  pdf_document: default
 ---
 
 
@@ -76,7 +72,7 @@ Total_steps_per_day=tapply(data$steps,data$date,FUN=sum,na.rm=TRUE)
 qplot(Total_steps_per_day, xlab='Total steps per day', ylab='Frequency', binwidth=1000)
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-2-1.png)<!-- -->
+![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2-1.png)
 
 ```r
 m<-mean(Total_steps_per_day)
@@ -95,13 +91,13 @@ ggplot(data=average, aes(x=interval, y=mean_steps)) +
     ylab("Average number of steps taken")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
+![plot of chunk unnamed-chunk-3](figure/unnamed-chunk-3-1.png)
 
 ```r
 max_interval <- average[which.max(average$mean_steps),]
 ```
 5-minute interval with maximum number of steps is:
-835, 206.1698113
+- 835, 206.1698113
 
 ## Imputing missing values
 
@@ -118,13 +114,13 @@ Total_steps_imputed <- tapply(imputed_data$steps, imputed_data$date, sum)
 qplot(Total_steps_imputed, xlab='Total steps per day', ylab='Frequency', binwidth=1000)
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
+![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5-1.png)
 
 ```r
 new_mean<-mean(Total_steps_imputed)
 new_med<-median(Total_steps_imputed)
 ```
-Original mean was 9354.2295082; new mean is 1.0766189\times 10^{4}
+Original mean was 9354.2295082; new mean is 1.0766189 &times; 10<sup>4</sup>
 Original median was 10395; new median is `new_med`
 Effect: Median of data is pushed toward the mean
 
@@ -143,7 +139,7 @@ ggplot(new_average, aes(x =new_interval, y=new_steps, color=weekend)) +
   labs(title = "Mean of Steps", x = "interval", y = "steps")
 ```
 
-![](PA1_template_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
+![plot of chunk unnamed-chunk-6](figure/unnamed-chunk-6-1.png)
 
 
 -There is some variation on weekdays whereas not much variation on weekends.
