@@ -58,7 +58,7 @@ new_med<-median(Total_steps_imputed)
 
 ```
 Original mean was `r m`; new mean is `r new_mean`
-Original median was `r med`; new median is `r `new_med`
+Original median was `r med`; new median is `r new_med`
 Effect: Median of data is pushed toward the mean
 
 ## Are there differences in activity patterns between weekdays and weekends?
